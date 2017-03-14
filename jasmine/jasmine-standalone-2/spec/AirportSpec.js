@@ -26,6 +26,12 @@ describe("Airport", function() {
       airport.land(plane);
       expect(plane.updateLocation).toHaveBeenCalledWith("in an airport");
     });
+
+    it("cannot land five planes because it has a capacity of four", function() {
+      for (i=0;i<4;i++)
+        airport.land(plane);
+      expect(function() {airport.land(plane)}).toThrow("this airport has reached capacity.");
+    });
   });
 
   describe("Instructing plane to takeoff", function() {

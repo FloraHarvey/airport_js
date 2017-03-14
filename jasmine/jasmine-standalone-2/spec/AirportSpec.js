@@ -5,6 +5,7 @@ describe("Airport", function() {
 
   beforeEach(function() {
     airport.planes = [];
+    spyOn(airport.weather, "isStormy").and.returnValue(false);
   });
 
   it( "exists", function() {
@@ -32,6 +33,12 @@ describe("Airport", function() {
         airport.land(plane);
       expect(function() {airport.land(plane)}).toThrow("this airport has reached capacity.");
     });
+
+    it("will not land if weather is stormy", function() {
+      airport.weather.isStormy.and.returnValue(true);
+      expect(function() {airport.land(plane)}).toThrow("Cannot land due to stormy weather")
+    });
+
   });
 
   describe("Instructing plane to takeoff", function() {
@@ -46,6 +53,11 @@ describe("Airport", function() {
       airport.land(plane);
       airport.takeoff(plane);
       expect(plane.updateLocation).toHaveBeenCalledWith("in the sky");
+    });
+
+    it("will not take off if weather is stormy", function() {
+      airport.weather.isStormy.and.returnValue(true);
+      expect(function() {airport.takeoff(plane)}).toThrow("Cannot takeoff due to stormy weather")
     });
   });
 
